@@ -1,0 +1,20 @@
+@keyframes fade {
+  to {opacity: 1;}
+}
+html {
+  height: 100%;
+}
+body {
+  height: 100%;
+  transition: 1s ease-in-out;
+  &::after {
+    content: '';
+    position: absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    opacity: 0;
+    animation: fade 3s alternate infinite;
+  }
+}
