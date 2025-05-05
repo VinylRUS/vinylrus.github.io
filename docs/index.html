@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pepegovich | Стример и создатель контента</title>
-    <meta name="description" content="Официальная страница Pepegovich - стримы, музыка и творчество">
+    <title>VinylRUS | Стример и создатель контента</title>
+    <meta name="description" content="Официальная страница VinylRUS - стримы, музыка и творчество">
     <link rel="icon" href="https://i.imgur.com/3ZrM9DH.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -26,7 +26,7 @@
             overflow-x: hidden;
         }
         
-        /* Анимированный градиентный фон */
+        /* Плавный анимированный градиент */
         .gradient-bg {
             position: fixed;
             top: 0;
@@ -34,29 +34,21 @@
             width: 100%;
             height: 100%;
             z-index: -1;
-            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #a1c4fd, #c2e9fb);
             background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
+            animation: gradientFlow 20s ease infinite;
+            opacity: 0.8;
         }
         
-        @keyframes gradientShift {
+        @keyframes gradientFlow {
             0% {
                 background-position: 0% 50%;
-                background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
-            }
-            25% {
-                background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
             }
             50% {
                 background-position: 100% 50%;
-                background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-            }
-            75% {
-                background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
             }
             100% {
                 background-position: 0% 50%;
-                background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
             }
         }
         
