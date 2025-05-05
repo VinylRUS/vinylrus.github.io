@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pepegovich | Стример & Битмейкер</title>
     <meta name="theme-color" content="#6C5CE7">
-    <meta name="description" content="Ссылки на все мои платформы">
+    <meta name="description" content="Ссылки на все мои платформы | Стример и битмейкер">
     <link rel="shortcut icon" href="https://i.imgur.com/3ZrM9DH.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -114,17 +114,11 @@
             width: 100%;
             opacity: 0;
             transform: translateY(20px);
-            animation: fadeInUp 0.6s ease forwards;
         }
         
-        .link-btn:nth-child(1) { animation-delay: 0.1s; }
-        .link-btn:nth-child(2) { animation-delay: 0.2s; }
-        .link-btn:nth-child(3) { animation-delay: 0.3s; }
-        .link-btn:nth-child(4) { animation-delay: 0.4s; }
-        .link-btn:nth-child(5) { animation-delay: 0.5s; }
-        .link-btn:nth-child(6) { animation-delay: 0.6s; }
-        .link-btn:nth-child(7) { animation-delay: 0.7s; }
-        .link-btn:nth-child(8) { animation-delay: 0.8s; }
+        .link-btn.visible {
+            animation: fadeInUp 0.6s ease forwards;
+        }
         
         .link-btn:hover {
             transform: translateY(-3px);
@@ -148,9 +142,8 @@
             padding-top: 30px;
             color: var(--gray);
             font-size: 0.9rem;
-            animation: fadeIn 1s ease forwards;
-            animation-delay: 0.8s;
             opacity: 0;
+            animation: fadeIn 1s ease 0.8s forwards;
         }
         
         .footer a {
@@ -231,10 +224,14 @@
                 <i class="fas fa-tv"></i> Trovo
             </a>
             
-            <a href="https://www.twitch.tv/pepegovichfromrussia" class="link-btn" target="_blank">
-                <i class="fas fa-tv"></i> Twitch
+            <a href="https://discord.gg/pEpM5Vsahn" class="link-btn" target="_blank">
+                <i class="fab fa-discord"></i> Дискорд
             </a>
 
+            <a href="https://www.twitch.tv/pepegovichfromrussia" class="link-btn" target="_blank">
+                <i class="fa-brands fa-twitch"></i> Twitch
+            </a>
+            
             <a href="https://goodgame.ru/channel/VinylRUS/" class="link-btn" target="_blank">
                 <i class="fas fa-gamepad"></i> GoodGame
             </a>
@@ -244,16 +241,17 @@
             </a>
             
             <a href="https://donatty.com/pepegovich" class="link-btn" target="_blank">
-                <i class="fas fa-donate"></i> Donate
+                <i class="fas fa-donate"></i> Донат
             </a>
             
             <a href="https://t.me/+Yk1gHCFErS0yNmQy" class="link-btn" target="_blank">
-                <i class="fab fa-telegram"></i> Telegram
+                <i class="fab fa-telegram"></i> Телеграм
             </a>
             
-            <a href="https://discord.gg/pEpM5Vsahn" class="link-btn" target="_blank">
-                <i class="fab fa-discord"></i> Discord
+            <a href="https://github.com/VinylRUS" class="link-btn" target="_blank">
+                <i class="fa-brands fa-github"></i> GitHub
             </a>
+
         </div>
         
         <div class="footer">
@@ -265,46 +263,43 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Анимация появления кнопок (только при загрузке)
             const links = document.querySelectorAll('.link-btn');
-            let animationTriggered = {
-                top: false,
-                bottom: false
-            };
+            links.forEach((link, index) => {
+                setTimeout(() => {
+                    link.classList.add('visible');
+                }, index * 100 + 100);
+            });
+
+            // Пружинящий эффект при прокрутке
+            let springAnimationCooldown = false;
             
-            function checkScrollPosition() {
+            window.addEventListener('scroll', function() {
+                if (springAnimationCooldown) return;
+                
                 const currentScroll = window.scrollY || document.documentElement.scrollTop;
                 const atTop = currentScroll === 0;
                 const atBottom = window.innerHeight + currentScroll >= document.body.offsetHeight - 50;
                 
-                if (atTop && !animationTriggered.top) {
-                    triggerSpringAnimation();
-                    animationTriggered.top = true;
-                } else if (!atTop) {
-                    animationTriggered.top = false;
-                }
-                
-                if (atBottom && !animationTriggered.bottom) {
-                    triggerSpringAnimation();
-                    animationTriggered.bottom = true;
-                } else if (!atBottom) {
-                    animationTriggered.bottom = false;
-                }
-            }
-            
-            function triggerSpringAnimation() {
-                links.forEach((link, index) => {
-                    setTimeout(() => {
-                        link.classList.add('spring-effect');
-                        
+                if (atTop || atBottom) {
+                    springAnimationCooldown = true;
+                    
+                    links.forEach((link, index) => {
                         setTimeout(() => {
-                            link.classList.remove('spring-effect');
-                        }, 500);
-                    }, index * 1000);
-                });
-            }
-            
-            window.addEventListener('scroll', checkScrollPosition);
-            window.addEventListener('resize', checkScrollPosition);
+                            link.classList.add('spring-effect');
+                            
+                            setTimeout(() => {
+                                link.classList.remove('spring-effect');
+                            }, 500);
+                        }, index * 100);
+                    });
+                    
+                    // Защита от повторного срабатывания в течение 1 секунды
+                    setTimeout(() => {
+                        springAnimationCooldown = false;
+                    }, 1000);
+                }
+            });
         });
     </script>
 </body>
