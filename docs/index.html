@@ -4,26 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pepegovich | Стример</title>
-    <meta name="description" content="Ссылки на все мои платформы">
     <link rel="icon" href="https://i.imgur.com/3ZrM9DH.png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #6c5ce7;
-            --dark: #2d3436;
-            --light: #f5f6fa;
+            --text-color: #2d3436;
+            --accent-color: #6c5ce7;
+            --bg-start: #a1c4fd;
+            --bg-end: #c2e9fb;
         }
         
         body {
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #a1c4fd, #c2e9fb);
+            background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
             background-size: 400% 400%;
-            animation: gradientFlow 20s ease infinite;
-            color: var(--dark);
-            line-height: 1.5;
+            animation: gradientFlow 15s ease infinite;
+            color: var(--text-color);
+            line-height: 1.6;
             min-height: 100vh;
             margin: 0;
-            padding: 1rem;
+            padding: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -36,20 +35,18 @@
         }
         
         .container {
-            max-width: 500px;
+            max-width: 400px;
             width: 100%;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(8px);
-            border-radius: 16px;
-            padding: 1.5rem;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
         
-        header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+            position: relative;
         }
         
         .avatar {
@@ -57,184 +54,97 @@
             height: 80px;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid var(--primary);
-            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
-            cursor: pointer;
-            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 3px solid var(--accent-color);
+            margin-bottom: 15px;
         }
         
-        .avatar:hover {
-            transform: scale(1.1) rotate(5deg);
+        h1 {
+            font-size: 1.8rem;
+            margin: 0 0 5px 0;
+            color: var(--text-color);
         }
         
-        .header-text h1 {
-            font-size: 1.5rem;
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.8;
             margin: 0;
         }
         
-        .header-text p {
-            margin: 0.3rem 0 0;
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-        
         .links {
-            display: grid;
-            gap: 0.8rem;
+            list-style: none;
+            padding: 0;
+            margin: 0 0 25px 0;
         }
         
-        .link-card {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            padding: 0.8rem 1rem;
+        .link-item {
+            margin-bottom: 10px;
+        }
+        
+        .link-item a {
+            display: block;
+            padding: 10px 15px;
             background: rgba(255, 255, 255, 0.7);
-            border-radius: 10px;
-            text-decoration: none;
-            color: var(--dark);
-            transition: all 0.3s ease;
-        }
-        
-        .link-card:hover {
-            background: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-        
-        .link-icon {
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, var(--primary) 0%, #a29bfe 100%);
             border-radius: 8px;
-            color: white;
+            color: var(--text-color);
+            text-decoration: none;
+            transition: all 0.2s ease;
         }
         
-        .link-text {
-            flex: 1;
-            font-size: 0.95rem;
+        .link-item a:hover {
+            background: white;
+            transform: translateX(5px);
         }
         
-        .link-text p {
-            margin: 0.2rem 0 0;
-            font-size: 0.8rem;
-            opacity: 0.7;
-        }
-        
-        footer {
+        .footer {
+            font-size: 0.9rem;
             text-align: center;
-            margin-top: 1.5rem;
-            font-size: 0.8rem;
             opacity: 0.8;
         }
         
-        .heart {
-            color: #ff4757;
-            display: inline-block;
-            animation: pulse 1.5s infinite;
+        .footer a {
+            color: var(--accent-color);
+            text-decoration: none;
         }
         
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+        .hand-icon {
+            display: inline-block;
+            animation: wave 2s infinite;
+            transform-origin: 70% 70%;
+        }
+        
+        @keyframes wave {
+            0% { transform: rotate(0deg); }
+            10% { transform: rotate(-10deg); }
+            20% { transform: rotate(12deg); }
+            30% { transform: rotate(-10deg); }
+            40% { transform: rotate(9deg); }
+            50% { transform: rotate(0deg); }
+            100% { transform: rotate(0deg); }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
+        <div class="header">
             <img src="https://i.imgur.com/3ZrM9DH.png" alt="Pepegovich" class="avatar">
-            <div class="header-text">
-                <h1>Pepegovich</h1>
-                <p>Стример и битмейкер из России</p>
-            </div>
-        </header>
+            <h1>Pepegovich</h1>
+            <p class="subtitle">Стример и (возможно) битмейкер из России</p>
+        </div>
         
-        <main class="links">
-            <a href="https://www.youtube.com/channel/UC_qeVTjk0QMUecP9o7pNP9A" class="link-card" target="_blank">
-                <div class="link-icon">
-                    <i class="fab fa-youtube"></i>
-                </div>
-                <div class="link-text">
-                    <h3>YouTube</h3>
-                    <p>Основная платформа для контента</p>
-                </div>
-                <i class="fas fa-chevron-right"></i>
-            </a>
-            
-            <a href="https://trovo.live/s/Pepegovich" class="link-card" target="_blank">
-                <div class="link-icon">
-                    <i class="fas fa-tv"></i>
-                </div>
-                <div class="link-text">
-                    <h3>Trovo</h3>
-                    <p>Стримы и игровые трансляции</p>
-                </div>
-                <i class="fas fa-chevron-right"></i>
-            </a>
-            
-            <a href="https://goodgame.ru/channel/VinylRUS/" class="link-card" target="_blank">
-                <div class="link-icon">
-                    <i class="fas fa-gamepad"></i>
-                </div>
-                <div class="link-text">
-                    <h3>GoodGame</h3>
-                    <p>Альтернативная платформа для стримов</p>
-                </div>
-                <i class="fas fa-chevron-right"></i>
-            </a>
-            
-            <a href="https://boosty.to/vinylrus" class="link-card" target="_blank">
-                <div class="link-icon">
-                    <i class="fas fa-heart"></i>
-                </div>
-                <div class="link-text">
-                    <h3>Boosty</h3>
-                    <p>Поддержать автора</p>
-                </div>
-                <i class="fas fa-chevron-right"></i>
-            </a>
-            
-            <a href="https://donatty.com/pepegovich" class="link-card" target="_blank">
-                <div class="link-icon">
-                    <i class="fas fa-donate"></i>
-                </div>
-                <div class="link-text">
-                    <h3>Донат</h3>
-                    <p>Финансовая поддержка</p>
-                </div>
-                <i class="fas fa-chevron-right"></i>
-            </a>
-            
-            <a href="https://t.me/+Yk1gHCFErS0yNmQy" class="link-card" target="_blank">
-                <div class="link-icon">
-                    <i class="fab fa-telegram"></i>
-                </div>
-                <div class="link-text">
-                    <h3>Телеграм</h3>
-                    <p>Чат и обновления</p>
-                </div>
-                <i class="fas fa-chevron-right"></i>
-            </a>
-            
-            <a href="https://discord.gg/pEpM5Vsahn" class="link-card" target="_blank">
-                <div class="link-icon">
-                    <i class="fab fa-discord"></i>
-                </div>
-                <div class="link-text">
-                    <h3>Дискорд</h3>
-                    <p>Сообщество и общение</p>
-                </div>
-                <i class="fas fa-chevron-right"></i>
-            </a>
-        </main>
+        <ul class="links">
+            <li class="link-item"><a href="https://www.youtube.com/channel/UC_qeVTjk0QMUecP9o7pNP9A" target="_blank">YouTube</a></li>
+            <li class="link-item"><a href="https://trovo.live/s/Pepegovich" target="_blank">Trovo</a></li>
+            <li class="link-item"><a href="https://goodgame.ru/channel/VinylRUS/" target="_blank">GoodGame</a></li>
+            <li class="link-item"><a href="https://boosty.to/vinylrus" target="_blank">Boosty</a></li>
+            <li class="link-item"><a href="https://donatty.com/pepegovich" target="_blank">Донат</a></li>
+            <li class="link-item"><a href="https://t.me/+Yk1gHCFErS0yNmQy" target="_blank">Телеграм</a></li>
+            <li class="link-item"><a href="https://discord.gg/pEpM5Vsahn" target="_blank">Дискорд</a></li>
+        </ul>
         
-        <footer>
-            <p>Сделано с <span class="heart">♥</span> корявыми руками</p>
-        </footer>
+        <div class="footer">
+            <p>Сделано с <i class="fas fa-heart" style="color: #ff4757;"></i> и корявыми руками | Хостинг на GitHub Pages</p>
+            <p>Хостинг от <a href="https://pages.github.com/" target="_blank">GitHub Pages</a> • <a href="mailto:vinylrusmail@protonmail.com">📌 Реклама</a></p>
+        </div>
     </div>
 </body>
 </html>
