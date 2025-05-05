@@ -117,7 +117,6 @@
             animation: fadeInUp 0.6s ease forwards;
         }
         
-        /* Задержки для анимации кнопок */
         .link-btn:nth-child(1) { animation-delay: 0.1s; }
         .link-btn:nth-child(2) { animation-delay: 0.2s; }
         .link-btn:nth-child(3) { animation-delay: 0.3s; }
@@ -134,7 +133,7 @@
         }
         
         .link-btn.spring-effect {
-            animation: spring 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation: spring 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
         
         .link-btn i {
@@ -260,42 +259,47 @@
     </div>
 
     <script>
-        // Анимация при прокрутке
         document.addEventListener('DOMContentLoaded', function() {
             const links = document.querySelectorAll('.link-btn');
-            let lastScrollPosition = 0;
-            let isScrolling = false;
+            let animationTriggered = {
+                top: false,
+                bottom: false
+            };
             
-            window.addEventListener('scroll', function() {
+            function checkScrollPosition() {
                 const currentScroll = window.scrollY || document.documentElement.scrollTop;
-                
-                // Проверяем достижение верха или низа страницы
                 const atTop = currentScroll === 0;
                 const atBottom = window.innerHeight + currentScroll >= document.body.offsetHeight - 50;
                 
-                if ((atTop || atBottom) && !isScrolling) {
-                    isScrolling = true;
-                    
-                    // Запускаем анимацию для всех кнопок с небольшой задержкой между ними
-                    links.forEach((link, index) => {
-                        setTimeout(() => {
-                            link.classList.add('spring-effect');
-                            
-                            // Удаляем класс после завершения анимации
-                            setTimeout(() => {
-                                link.classList.remove('spring-effect');
-                            }, 500);
-                        }, index * 100);
-                    });
-                    
-                    // Защита от повторного срабатывания
-                    setTimeout(() => {
-                        isScrolling = false;
-                    }, 100000);
+                if (atTop && !animationTriggered.top) {
+                    triggerSpringAnimation();
+                    animationTriggered.top = true;
+                } else if (!atTop) {
+                    animationTriggered.top = false;
                 }
                 
-                lastScrollPosition = currentScroll;
-            });
+                if (atBottom && !animationTriggered.bottom) {
+                    triggerSpringAnimation();
+                    animationTriggered.bottom = true;
+                } else if (!atBottom) {
+                    animationTriggered.bottom = false;
+                }
+            }
+            
+            function triggerSpringAnimation() {
+                links.forEach((link, index) => {
+                    setTimeout(() => {
+                        link.classList.add('spring-effect');
+                        
+                        setTimeout(() => {
+                            link.classList.remove('spring-effect');
+                        }, 500);
+                    }, index * 100);
+                });
+            }
+            
+            window.addEventListener('scroll', checkScrollPosition);
+            window.addEventListener('resize', checkScrollPosition);
         });
     </script>
 </body>
