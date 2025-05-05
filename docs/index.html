@@ -1,96 +1,205 @@
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Pepegovich LinkTree</title>
-	<link rel="stylesheet" href="index.css">
-
-<!DOCTYPE html>
-<html lang="ru">
-  <meta charset="utf-8" />
-  <link rel="shortcut icon" href="https://i.imgur.com/3ZrM9DH.png" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#343a40" />
-  <meta
-          name="description"
-          content="Links To My Accounts | Developed By - Pepegovich"
-  />  
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-     <title>Links - Your Name</title>
-     <style>
-       body{
-         background-color: #faf8ef;
-       }
-       h5{
-             color: #343a40;
-       }
-       .name{
-           color: #343a40;
-       }
-       .love{
-           color: #343a40 !important;
-       }
-       /*----------------- Mail-------------------- */
-       #email{
-           text-decoration: none;
-           float: right;
-           color:#343a40;
-       }
-       .footer{
-           margin-top: 5% !important;
-           margin-bottom: 10px;
-       }
-       .buttonbox{
-	   border: thick double #343a40;
-       }
-       @media (max-width: 479px) {
-            .footer{
-            margin-top: 35% !important;
+    <title>Pepegovich | Стример & Битмейкер</title>
+    <meta name="theme-color" content="#6C5CE7">
+    <meta name="description" content="Ссылки на все мои платформы | Стример и битмейкер">
+    <link rel="shortcut icon" href="https://i.imgur.com/3ZrM9DH.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6C5CE7;
+            --dark: #2D3436;
+            --light: #FDFDFD;
+            --gray: #636E72;
+            --bg: #F8F9FA;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+        
+        body {
+            background-color: var(--bg);
+            color: var(--dark);
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+            flex: 1;
+        }
+        
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            animation: fadeIn 0.8s ease;
+        }
+        
+        .profile-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--primary);
+            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+        }
+        
+        .profile-text h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+            color: var(--dark);
+        }
+        
+        .profile-text p {
+            color: var(--gray);
+            font-size: 1rem;
+        }
+        
+        .links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+        
+        .link-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px 20px;
+            background: white;
+            color: var(--dark);
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .link-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        .link-btn i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: auto;
+            padding-top: 30px;
+            color: var(--gray);
+            font-size: 0.9rem;
+            animation: fadeIn 1s ease;
+        }
+        
+        .footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .heart {
+            color: #E84393;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
+        @media (max-width: 480px) {
+            .profile {
+                flex-direction: column;
+                text-align: center;
             }
-       }
-     </style>
+            
+            .profile-img {
+                width: 90px;
+                height: 90px;
+            }
+            
+            .profile-text h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-  <div class="media mt-5">
-    <img src="https://i.imgur.com/3ZrM9DH.png" class="m-3" alt="image" width="75px" height="75px">
-    <div class="media-body m-2">
-      <h5 class="align-items-center mt-2">Pepegovich</h5>
-      <p>Привет!
-      Я Pepegovich
-      стример и (возможно) битмейкер из России.</p>
+    <div class="container">
+        <div class="profile">
+            <img src="https://i.imgur.com/3ZrM9DH.png" alt="Pepegovich" class="profile-img">
+            <div class="profile-text">
+                <h1>Pepegovich</h1>
+                <p>Стример и (возможно) битмейкер из России</p>
+            </div>
+        </div>
+        
+        <div class="links">
+            <a href="https://www.youtube.com/channel/UC_qeVTjk0QMUecP9o7pNP9A" class="link-btn" target="_blank">
+                <i class="fab fa-youtube"></i> YouTube
+            </a>
+            
+            <a href="https://trovo.live/s/Pepegovich" class="link-btn" target="_blank">
+                <i class="fas fa-tv"></i> Trovo
+            </a>
+            
+            <a href="https://goodgame.ru/channel/VinylRUS/" class="link-btn" target="_blank">
+                <i class="fas fa-gamepad"></i> GoodGame
+            </a>
+            
+            <a href="https://boosty.to/vinylrus" class="link-btn" target="_blank">
+                <i class="fas fa-heart"></i> Boosty
+            </a>
+            
+            <a href="https://donatty.com/pepegovich" class="link-btn" target="_blank">
+                <i class="fas fa-donate"></i> Донат
+            </a>
+            
+            <a href="https://t.me/+Yk1gHCFErS0yNmQy" class="link-btn" target="_blank">
+                <i class="fab fa-telegram"></i> Телеграм
+            </a>
+            
+            <a href="https://discord.gg/pEpM5Vsahn" class="link-btn" target="_blank">
+                <i class="fab fa-discord"></i> Дискорд
+            </a>
+        </div>
+        
+        <div class="footer">
+            <p>Сделано с <span class="heart">♥</span> корявыми руками</p>
+            <p>Хостинг от <a href="https://pages.github.com/" target="_blank">GitHub Pages</a> • 
+            <a href="mailto:vinylrusmail@protonmail.com"><i class="fas fa-envelope"></i> Реклама</a></p>
+        </div>
     </div>
-  </div>
-<div class="mt-4">
-<div class="buttonbox">
-  <a href="https://www.youtube.com/channel/UC_qeVTjk0QMUecP9o7pNP9A" class="btn btn-outline-dark btn-block" role="button" target="_blank">Youtube</a>
-  <br>
-  <a href="https://trovo.live/s/Pepegovich" class="btn btn-outline-dark btn-block" role="button" target="_blank">Trovo</a>
-  <br>
-  <a href="https://goodgame.ru/channel/VinylRUS/" class="btn btn-outline-dark btn-block" role="button" target="_blank">GoodGame</a>
-  <br>
-  <a href="https://boosty.to/vinylrus" class="btn btn-outline-dark btn-block" role="button" target="_blank">Boosty</a>
-  <br>
-  <a href="https://donatty.com/pepegovich" class="btn btn-outline-dark btn-block" role="button" target="_blank">Донат</a>
-  <br>
-  <a href="https://t.me/+Yk1gHCFErS0yNmQy" class="btn btn-outline-dark btn-block" role="button" target="_blank">Телеграм</a>
-  <br>
-  <a href="https://discord.gg/pEpM5Vsahn" class="btn btn-outline-dark btn-block" role="button" target="_blank">Дискорд</a>
-</div>
-</div>
-        <!--------------------Footer---------------------------->
-  <div class="footer mt-5">
-    <hr/>
-    <h6>Сделано с <span class="love">♥</span> корявыми руками.</h6>
-    <h6>
-      Хостинг от
-      <a href="https://pages.github.com/" class="name" target="_blank"> GitHub Pages </a>
-      <a id="email" href="mailto:vinylrusmail@protonmail.com"> <i class="fa fa-envelope"> </i> Реклама</a>
-    </h6>
-  </div>
-</div>
 </body>
-  
 </html>
