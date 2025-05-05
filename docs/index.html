@@ -42,7 +42,7 @@
         }
         
         .container {
-            max-width: 500px; /* Уменьшил общую ширину */
+            max-width: 500px;
             margin: 0 auto;
             width: 100%;
             flex: 1;
@@ -109,10 +109,22 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
             transition: all 0.3s ease;
             border: 2px solid transparent;
-            max-width: 400px; /* Уменьшил ширину кнопок */
-            margin: 0 auto; /* Центрирование кнопок */
+            max-width: 400px;
+            margin: 0 auto;
             width: 100%;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease forwards;
         }
+        
+        /* Задержки для анимации кнопок */
+        .link-btn:nth-child(1) { animation-delay: 0.1s; }
+        .link-btn:nth-child(2) { animation-delay: 0.2s; }
+        .link-btn:nth-child(3) { animation-delay: 0.3s; }
+        .link-btn:nth-child(4) { animation-delay: 0.4s; }
+        .link-btn:nth-child(5) { animation-delay: 0.5s; }
+        .link-btn:nth-child(6) { animation-delay: 0.6s; }
+        .link-btn:nth-child(7) { animation-delay: 0.7s; }
         
         .link-btn:hover {
             transform: translateY(-3px);
@@ -136,7 +148,9 @@
             padding-top: 30px;
             color: var(--gray);
             font-size: 0.9rem;
-            animation: fadeIn 1s ease;
+            animation: fadeIn 1s ease forwards;
+            animation-delay: 0.8s;
+            opacity: 0;
         }
         
         .footer a {
@@ -155,8 +169,19 @@
         }
         
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         @keyframes pulse {
