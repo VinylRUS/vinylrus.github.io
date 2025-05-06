@@ -54,7 +54,7 @@
             align-items: center;
             gap: 15px;
             margin-bottom: 30px;
-            animation: fadeIn 0.8s ease;
+            animation: fadeIn 0.8s ease forwards;
         }
         
         .profile-img {
@@ -114,11 +114,18 @@
             width: 100%;
             opacity: 0;
             transform: translateY(20px);
+            animation: fadeInUp 0.6s forwards;
         }
         
-        .link-btn.visible {
-            animation: fadeInUp 0.6s ease forwards;
-        }
+        .link-btn:nth-child(1) { animation-delay: 0.1s; }
+        .link-btn:nth-child(2) { animation-delay: 0.2s; }
+        .link-btn:nth-child(3) { animation-delay: 0.3s; }
+        .link-btn:nth-child(4) { animation-delay: 0.4s; }
+        .link-btn:nth-child(5) { animation-delay: 0.5s; }
+        .link-btn:nth-child(6) { animation-delay: 0.6s; }
+        .link-btn:nth-child(7) { animation-delay: 0.7s; }
+        .link-btn:nth-child(8) { animation-delay: 0.8s; }
+        .link-btn:nth-child(9) { animation-delay: 0.9s; }
         
         .link-btn:hover {
             transform: translateY(-3px);
@@ -143,7 +150,7 @@
             color: var(--gray);
             font-size: 0.9rem;
             opacity: 0;
-            animation: fadeIn 1s ease 0.8s forwards;
+            animation: fadeIn 1s 0.8s forwards;
         }
         
         .footer a {
@@ -263,43 +270,45 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Анимация появления кнопок (только при загрузке)
+            // Флаг для отслеживания состояния анимации
+            let hasAnimated = false;
+            let springCooldown = false;
             const links = document.querySelectorAll('.link-btn');
-            links.forEach((link, index) => {
-                setTimeout(() => {
-                    link.classList.add('visible');
-                }, index * 100 + 100);
-            });
-
-            // Пружинящий эффект при прокрутке
-            let springAnimationCooldown = false;
             
+            // Пружинящий эффект при достижении верха/низа
             window.addEventListener('scroll', function() {
-                if (springAnimationCooldown) return;
+                if (springCooldown) return;
                 
                 const currentScroll = window.scrollY || document.documentElement.scrollTop;
                 const atTop = currentScroll === 0;
                 const atBottom = window.innerHeight + currentScroll >= document.body.offsetHeight - 50;
                 
-                if (atTop || atBottom) {
-                    springAnimationCooldown = true;
+                if ((atTop || atBottom) && !springCooldown) {
+                    springCooldown = true;
                     
                     links.forEach((link, index) => {
                         setTimeout(() => {
-                            link.classList.add('spring-effect');
-                            
-                            setTimeout(() => {
-                                link.classList.remove('spring-effect');
-                            }, 500);
+                            link.style.animation = 'none';
+                            void link.offsetHeight; // Trigger reflow
+                            link.style.animation = 'spring 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards';
                         }, index * 100);
                     });
                     
-                    // Защита от повторного срабатывания в течение 1 секунды
                     setTimeout(() => {
-                        springAnimationCooldown = false;
+                        springCooldown = false;
                     }, 1000);
                 }
             });
+            
+            // Запуск начальной анимации
+            if (!hasAnimated) {
+                hasAnimated = true;
+                links.forEach(link => {
+                    // Анимация уже задана в CSS, просто делаем видимыми
+                    link.style.opacity = '1';
+                    link.style.transform = 'translateY(0)';
+                });
+            }
         });
     </script>
 </body>
