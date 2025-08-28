@@ -1,24 +1,106 @@
 :root{
-  --bg:#0f1724;
+  --bg:#0f1724; /* fallback for very old browsers */
   --card:#0b1220;
   --text:#e6eef8;
   --muted:#9aa7bf;
   --accent:#60a5fa;
   --radius:12px;
+
+  /* gradient colors */
+  --g-start: #fbc4ab;
+  --g-end:   #e7c6ff;
+
+  /* animation settings */
+  --grad-duration: 18s;
+  --grad-ease: ease-in-out;
 }
 
-*{box-sizing:border-box}
-html,body{height:100%}
-body{
+/* ---------- background animated layers (placed behind everything) ---------- */
+body {
   margin:0;
-  background:var(--bg);
   color:var(--text);
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
   display:flex;
   align-items:center;
   justify-content:center;
   padding:24px;
+
+  /* fallback solid color while gradients load / for reduced-motion */
+  background: var(--bg);
+  position: relative; /* for pseudo elements */
+  min-height: 100vh;
 }
+
+/* Two fullscreen layers that will crossfade between gradients */
+body::before,
+body::after{
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  will-change: opacity, transform;
+  background-repeat: no-repeat;
+  background-size: cover;
+  /* slightly blur to make content readable (optional) */
+  filter: saturate(1.05) blur(0px);
+}
+
+/* first gradient layer */
+body::before{
+  background-image: linear-gradient(135deg, var(--g-start) 0%, var(--g-end) 100%);
+  opacity: 1;
+  transform: scale(1.02);
+  animation: gradient-fade var(--grad-duration) var(--grad-ease) infinite;
+}
+
+/* second gradient layer (same colors, different angle for subtle variation) */
+body::after{
+  background-image: linear-gradient(315deg, var(--g-start) 0%, var(--g-end) 100%);
+  opacity: 0;
+  transform: scale(1);
+  /* offset the phase so layers alternate */
+  animation: gradient-fade var(--grad-duration) var(--grad-ease) infinite;
+  animation-delay: calc(var(--grad-duration) / -2); /* run offset by half cycle */
+}
+
+/* cross-fade keyframes */
+@keyframes gradient-fade {
+  0% {
+    opacity: 0;
+    transform: scale(1.02);
+  }
+  25% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  75% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.02);
+  }
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  body::before,
+  body::after {
+    animation: none;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+  body {
+    background: linear-gradient(135deg, var(--g-start), var(--g-end));
+  }
+}
+
+/* ---------- existing layout styles (kept from previous file) ---------- */
+*{box-sizing:border-box}
+html,body{height:100%}
 
 .page{width:100%;max-width:720px}
 .hero{text-align:center;margin-bottom:18px}
