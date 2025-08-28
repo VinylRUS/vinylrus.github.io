@@ -1,37 +1,28 @@
-/* docs/styles.css
-   Полная, современная версия стилей для страницы-ссылок.
-   - Переливной градиент между #fbc4ab и #e7c6ff
-   - Сохранена логика .link / .link.seen / bounce
-   - Уважение prefers-reduced-motion
-   - Комментарии + fallback при конфликте
+/* docs/styles.css — gradient + glass cards (glassmorphism)
+   - плавный фон-перелив (как раньше)
+   - кнопки/карточки — полупрозрачное стекло с хорошей читаемостью
+   - сохраняется .link.seen (однократная подпрыгивающая анимация)
+   - уважение prefers-reduced-motion
 */
 
-/* ==========================
-   :root — переменные темы
-   ========================== */
+/* ========== переменные ========== */
 :root{
-  /* gradient */
   --g1: #fbc4ab;
   --g2: #e7c6ff;
 
-  /* general */
-  --text: #0b1220;            /* основной текст на карточках */
-  --muted: #5b6b7a;           /* вспомогательный текст */
-  --card-bg: rgba(8,12,18,0.64); /* фон карточек (полупрозрачный для контраста) */
-  --card-border: rgba(255,255,255,0.04);
-
+  --card-text: #07101a;       /* основной текст на карточках (тёмный для контраста) */
+  --muted: #51606e;
+  --card-bg-alpha: 0.18;      /* базовая прозрачность карточки (не сильно высокая) */
+  --card-border-alpha: 0.18;  /* граница карточки */
   --radius: 12px;
   --gap: 12px;
   --maxw: 840px;
 
-  /* gradient animation */
-  --grad-duration: 24s;      /* длительность цикла перелива */
+  --grad-duration: 24s;
   --grad-timing: ease-in-out;
 }
 
-/* ==========================
-   Reset / базовое поведение
-   ========================== */
+/* ========== сброс / базовые правила ========== */
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
@@ -40,181 +31,122 @@ body{
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
-  color:var(--text);
+  color: var(--card-text);
   display:flex;
   align-items:center;
   justify-content:center;
   padding:28px;
 
-  /* Fallback: если анимация не поддерживается/отключена — простая статичная градиент-подложка */
+  /* базовый градиент (фоновая подложка) */
   background: linear-gradient(135deg, var(--g1) 0%, var(--g2) 100%);
   background-size: 200% 200%;
-  /* Обёртка-стиль без !important — если другой CSS перестилит, см. совет внизу */
-}
-
-/* ==========================
-   Переливной фон (анимируем background-position)
-   - более устойчивый к переопределениям, чем слои ::before/::after
-   ========================== */
-@keyframes gradientShift {
-  0%   { background-position: 0% 50%; }
-  50%  { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-body {
   animation: gradientShift var(--grad-duration) var(--grad-timing) infinite;
 }
 
-/* Уважать пользователей, предпочитающих уменьшенное движение */
-@media (prefers-reduced-motion: reduce) {
-  body { animation: none !important; }
+/* перестановка фона при reduced motion */
+@media (prefers-reduced-motion: reduce){
+  body{ animation: none !important; }
 }
 
-/* ==========================
-   Контейнер страницы
-   ========================== */
-.page{
-  width:100%;
-  max-width:var(--maxw);
-  margin: 0 auto;
-  display:block;
+/* плавный сдвиг позиции фонового градиента */
+@keyframes gradientShift{
+  0% { background-position: 0% 50%; }
+  50%{ background-position: 100% 50%; }
+  100%{ background-position: 0% 50%; }
 }
 
-/* Хедер / профиль */
-.hero{
-  text-align:center;
-  margin-bottom:18px;
-  padding: 8px 12px;
-  user-select: none;
-}
+/* ========== контейнер и хедер ========== */
+.page{ width:100%; max-width:var(--maxw); margin:0 auto; display:block; }
 
+.hero{ text-align:center; margin-bottom:18px; padding:8px 12px; user-select:none; }
 .avatar{
-  width:92px;
-  height:92px;
-  border-radius:999px;
-  border:2px solid rgba(255,255,255,0.06);
-  object-fit:cover;
-  display:block;
-  margin:0 auto 10px;
-  background-color: rgba(255,255,255,0.06);
+  width:92px;height:92px;border-radius:999px;border:2px solid rgba(255,255,255,0.08);
+  object-fit:cover;display:block;margin:0 auto 10px;background-color: rgba(255,255,255,0.06);
 }
+.name{ font-size:1.35rem; margin:0; font-weight:700; color:var(--card-text); }
+.subtitle{ color:var(--muted); margin:6px 0 0; font-size:0.95rem; }
 
-.name{
-  font-size:1.35rem;
-  margin:0;
-  color:var(--text);
-  font-weight:700;
-}
+/* ========== список ссылок (grid) ========== */
+.links{ display:grid; gap:var(--gap); margin:18px 0; }
 
-.subtitle{
-  color:var(--muted);
-  margin:6px 0 0;
-  font-size:0.95rem;
-}
-
-/* ==========================
-   Список ссылок / карточки
-   ========================== */
-.links{
-  display:grid;
-  gap:var(--gap);
-  margin:18px 0;
-}
-
-/* карточка-ссылка (универсальная, работает и для <a> и для <button>) */
+/* ========== glass card (основной стиль ссылок/кнопок) ========== */
+/* Используется для <a> и для <button class="link action"> */
 .link, .link.action{
   display:block;
   padding:14px 16px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
-  color: var(--text);
+  border-radius:var(--radius);
+
+  /* GLASS: полупрозрачный фон + backdrop-filter (blur + saturate) */
+  background: linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.10));
+  background-clip: padding-box;
+
+  color: var(--card-text);
   text-decoration: none;
-  border-radius: var(--radius);
-  box-shadow: 0 6px 18px rgba(6,8,12,0.28);
-  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms;
-  border: 1px solid var(--card-border);
+  font-weight:700;
   text-align:left;
-  font-weight:600;
-  cursor: pointer;
-  backdrop-filter: blur(6px); /* если фон поддерживает, добавит приятную глубину */
-  -webkit-backdrop-filter: blur(6px);
+
+  /* эффект стекла: размытие фона позади и небольшая насыщенность */
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
+  backdrop-filter: blur(8px) saturate(140%);
+
+  /* тонкая граница (светлая) и лёгенькая тень для глубины */
+  border: 1px solid rgba(255,255,255,var(--card-border-alpha));
+  box-shadow: 0 8px 24px rgba(9,12,18,0.28);
+
+  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease, backdrop-filter 160ms ease;
+  cursor:pointer;
 }
 
-/* альтернативный контрастный фон для читаемости (если нужно — включай) */
-/* .link { background-color: var(--card-bg); } */
+/* альтернатива: если фон слишком светлый — можно усилить контраст:
+   .link { background: rgba(255,255,255,0.20); color:#06121a; } */
 
-.link:focus, .link.action:focus {
-  outline: 3px solid rgba(96,165,250,0.16);
+.link .link-content{ display:inline-flex; align-items:center; gap:10px; vertical-align:middle; }
+
+/* фокус-стиль — для клавиатурного доступа */
+.link:focus, .link.action:focus{
+  outline: 3px solid rgba(96,165,250,0.18);
   outline-offset: 3px;
-  box-shadow: 0 10px 25px rgba(6,8,12,0.38);
+  box-shadow: 0 14px 40px rgba(9,12,18,0.36);
+  transform: translateY(-4px);
 }
 
+/* hover: чуть поднимаем и усиливаем прозрачность/ясность стекла */
 .link:hover{
   transform: translateY(-3px);
+  box-shadow: 0 14px 40px rgba(9,12,18,0.36);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
+  backdrop-filter: blur(10px) saturate(150%);
+  background: linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0.12));
 }
 
-/* внутренний контейнер контента (иконка + текст) */
-.link .link-content{
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-  vertical-align:middle;
-}
+/* если нужно — svg-иконки в кнопках */
+.link .icon{ width:20px; height:20px; display:inline-block; opacity:0.95 }
 
-/* если используешь svg-иконки:
-   .link .icon { width:20px; height:20px; opacity:0.95 } */
-
-/* ==========================
-   Анимация "подпрыгивания" — запускается один раз при появлении (.seen)
-   ========================== */
+/* ========== подпрыгивание .seen (один раз) ========== */
 @keyframes bounce {
   0%   { transform: translateY(0); }
   25%  { transform: translateY(-9px); }
   55%  { transform: translateY(0); }
   100% { transform: translateY(0); }
 }
-
-/* .seen добавляется через JS (IntersectionObserver), и JS должен unobserve после добавления */
 .link.seen{
   animation: bounce 420ms cubic-bezier(.22,.9,.31,1) 1 both;
 }
 
-/* Для очень старых браузеров можно добавить простой fallback:
-   .link.seen { transform: translateY(0); }  (необязательно) */
-
-/* ==========================
-   Адаптивность
-   ========================== */
-@media (min-width: 640px){
-  .links{
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .hero{
-    margin-bottom:22px;
-  }
+/* ========== адаптивность ========== */
+@media (min-width:640px){
+  .links{ grid-template-columns: repeat(2, 1fr); }
+  .hero{ margin-bottom:22px; }
 }
 
-/* ==========================
-   Footer / мелкий текст
-   ========================== */
-.foot{
-  text-align:center;
-  color:var(--muted);
-  margin-top:12px;
-  font-size:0.86rem;
-}
+/* ========== футер ========== */
+.foot{ text-align:center; color:var(--muted); margin-top:12px; font-size:0.86rem; }
 
-/* ==========================
-   Полезные советы при отладке
-   ==========================
-   Если фон не меняется после деплоя:
-   1) Проверь, что браузер действительно подгружает этот файл: DevTools → Network → styles.css → статус 200.
-   2) Временно открой страницу с параметром (обойти кэш): https://<your-site>/?v=2
-   3) В Console можно быстро протестировать:
-       document.body.style.background = 'linear-gradient(135deg,#fbc4ab,#e7c6ff)';
-   4) Если другой CSS переопределяет background, можно временно поставить override (для теста):
-       body { background: linear-gradient(135deg,#fbc4ab,#e7c6ff) !important; }
-   5) Убедись, что link в head указывает именно на /styles.css или на ./styles.css (и файл лежит в docs/ если используешь GitHub Pages с папкой docs).
-
-   ========================== */
+/* ========== отладка / быстрые советы ==========
+   Если кнопки всё ещё "невидимы":
+   1) Убедись, что текущий styles.css загружен (DevTools → Network → styles.css → 200).
+   2) Временно применить override в Console:
+        document.querySelectorAll('.link').forEach(el => el.style.background = 'rgba(255,255,255,0.18)');
+   3) Если браузер не поддерживает backdrop-filter, эффект размытости не будет виден — в таком случае мы усилили фон (rgba 0.14-0.18) и добавили тень, чтобы карточки были читаемы.
+   4) Для IE/старых браузеров добавь fallback-bg: .link { background-color: rgba(255,255,255,0.22); }
+*/
