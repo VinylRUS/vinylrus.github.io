@@ -1,156 +1,220 @@
+/* docs/styles.css
+   Полная, современная версия стилей для страницы-ссылок.
+   - Переливной градиент между #fbc4ab и #e7c6ff
+   - Сохранена логика .link / .link.seen / bounce
+   - Уважение prefers-reduced-motion
+   - Комментарии + fallback при конфликте
+*/
+
+/* ==========================
+   :root — переменные темы
+   ========================== */
 :root{
-  --bg:#0f1724; /* fallback for very old browsers */
-  --card:#0b1220;
-  --text:#e6eef8;
-  --muted:#9aa7bf;
-  --accent:#60a5fa;
-  --radius:12px;
+  /* gradient */
+  --g1: #fbc4ab;
+  --g2: #e7c6ff;
 
-  /* gradient colors */
-  --g-start: #fbc4ab;
-  --g-end:   #e7c6ff;
+  /* general */
+  --text: #0b1220;            /* основной текст на карточках */
+  --muted: #5b6b7a;           /* вспомогательный текст */
+  --card-bg: rgba(8,12,18,0.64); /* фон карточек (полупрозрачный для контраста) */
+  --card-border: rgba(255,255,255,0.04);
 
-  /* animation settings */
-  --grad-duration: 18s;
-  --grad-ease: ease-in-out;
+  --radius: 12px;
+  --gap: 12px;
+  --maxw: 840px;
+
+  /* gradient animation */
+  --grad-duration: 24s;      /* длительность цикла перелива */
+  --grad-timing: ease-in-out;
 }
 
-/* ---------- background animated layers (placed behind everything) ---------- */
-body {
+/* ==========================
+   Reset / базовое поведение
+   ========================== */
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
   margin:0;
+  min-height:100vh;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
   color:var(--text);
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:24px;
+  padding:28px;
 
-  /* fallback solid color while gradients load / for reduced-motion */
-  background: var(--bg);
-  position: relative; /* for pseudo elements */
-  min-height: 100vh;
+  /* Fallback: если анимация не поддерживается/отключена — простая статичная градиент-подложка */
+  background: linear-gradient(135deg, var(--g1) 0%, var(--g2) 100%);
+  background-size: 200% 200%;
+  /* Обёртка-стиль без !important — если другой CSS перестилит, см. совет внизу */
 }
 
-/* Two fullscreen layers that will crossfade between gradients */
-body::before,
-body::after{
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  will-change: opacity, transform;
-  background-repeat: no-repeat;
-  background-size: cover;
-  /* slightly blur to make content readable (optional) */
-  filter: saturate(1.05) blur(0px);
+/* ==========================
+   Переливной фон (анимируем background-position)
+   - более устойчивый к переопределениям, чем слои ::before/::after
+   ========================== */
+@keyframes gradientShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
-/* first gradient layer */
-body::before{
-  background-image: linear-gradient(135deg, var(--g-start) 0%, var(--g-end) 100%);
-  opacity: 1;
-  transform: scale(1.02);
-  animation: gradient-fade var(--grad-duration) var(--grad-ease) infinite;
+body {
+  animation: gradientShift var(--grad-duration) var(--grad-timing) infinite;
 }
 
-/* second gradient layer (same colors, different angle for subtle variation) */
-body::after{
-  background-image: linear-gradient(315deg, var(--g-start) 0%, var(--g-end) 100%);
-  opacity: 0;
-  transform: scale(1);
-  /* offset the phase so layers alternate */
-  animation: gradient-fade var(--grad-duration) var(--grad-ease) infinite;
-  animation-delay: calc(var(--grad-duration) / -2); /* run offset by half cycle */
-}
-
-/* cross-fade keyframes */
-@keyframes gradient-fade {
-  0% {
-    opacity: 0;
-    transform: scale(1.02);
-  }
-  25% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  75% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: scale(1.02);
-  }
-}
-
-/* Respect users who prefer reduced motion */
+/* Уважать пользователей, предпочитающих уменьшенное движение */
 @media (prefers-reduced-motion: reduce) {
-  body::before,
-  body::after {
-    animation: none;
-    opacity: 1 !important;
-    transform: none !important;
-    filter: none !important;
-  }
-  body {
-    background: linear-gradient(135deg, var(--g-start), var(--g-end));
-  }
+  body { animation: none !important; }
 }
 
-/* ---------- existing layout styles (kept from previous file) ---------- */
-*{box-sizing:border-box}
-html,body{height:100%}
+/* ==========================
+   Контейнер страницы
+   ========================== */
+.page{
+  width:100%;
+  max-width:var(--maxw);
+  margin: 0 auto;
+  display:block;
+}
 
-.page{width:100%;max-width:720px}
-.hero{text-align:center;margin-bottom:18px}
-.avatar{width:92px;height:92px;border-radius:999px;border:2px solid rgba(255,255,255,0.04);object-fit:cover;display:block;margin:0 auto 10px}
-.name{font-size:1.3rem;margin:0}
-.subtitle{color:var(--muted);margin:6px 0 0;font-size:0.9rem}
+/* Хедер / профиль */
+.hero{
+  text-align:center;
+  margin-bottom:18px;
+  padding: 8px 12px;
+  user-select: none;
+}
 
+.avatar{
+  width:92px;
+  height:92px;
+  border-radius:999px;
+  border:2px solid rgba(255,255,255,0.06);
+  object-fit:cover;
+  display:block;
+  margin:0 auto 10px;
+  background-color: rgba(255,255,255,0.06);
+}
+
+.name{
+  font-size:1.35rem;
+  margin:0;
+  color:var(--text);
+  font-weight:700;
+}
+
+.subtitle{
+  color:var(--muted);
+  margin:6px 0 0;
+  font-size:0.95rem;
+}
+
+/* ==========================
+   Список ссылок / карточки
+   ========================== */
 .links{
   display:grid;
-  gap:12px;
+  gap:var(--gap);
   margin:18px 0;
 }
 
+/* карточка-ссылка (универсальная, работает и для <a> и для <button>) */
 .link, .link.action{
   display:block;
   padding:14px 16px;
-  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-  color:var(--text);
-  text-decoration:none;
-  border-radius:var(--radius);
-  box-shadow:0 2px 10px rgba(0,0,0,0.35);
-  transition:transform .12s ease, box-shadow .12s ease, background .12s;
-  border:1px solid rgba(255,255,255,0.03);
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  color: var(--text);
+  text-decoration: none;
+  border-radius: var(--radius);
+  box-shadow: 0 6px 18px rgba(6,8,12,0.28);
+  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms;
+  border: 1px solid var(--card-border);
   text-align:left;
   font-weight:600;
-  cursor:pointer;
+  cursor: pointer;
+  backdrop-filter: blur(6px); /* если фон поддерживает, добавит приятную глубину */
+  -webkit-backdrop-filter: blur(6px);
 }
+
+/* альтернативный контрастный фон для читаемости (если нужно — включай) */
+/* .link { background-color: var(--card-bg); } */
+
 .link:focus, .link.action:focus {
-  outline:3px solid rgba(96,165,250,0.18);
-  outline-offset:2px;
+  outline: 3px solid rgba(96,165,250,0.16);
+  outline-offset: 3px;
+  box-shadow: 0 10px 25px rgba(6,8,12,0.38);
 }
-.link:hover{transform:translateY(-3px)}
 
-.link .link-content{vertical-align:middle;display:inline-block}
+.link:hover{
+  transform: translateY(-3px);
+}
 
-/* ---- bounce animation (plays only once when .seen is added) ---- */
+/* внутренний контейнер контента (иконка + текст) */
+.link .link-content{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  vertical-align:middle;
+}
+
+/* если используешь svg-иконки:
+   .link .icon { width:20px; height:20px; opacity:0.95 } */
+
+/* ==========================
+   Анимация "подпрыгивания" — запускается один раз при появлении (.seen)
+   ========================== */
 @keyframes bounce {
-  0%{ transform: translateY(0); }
-  30%{ transform: translateY(-8px); }
-  60%{ transform: translateY(0); }
-  100%{ transform: translateY(0); }
+  0%   { transform: translateY(0); }
+  25%  { transform: translateY(-9px); }
+  55%  { transform: translateY(0); }
+  100% { transform: translateY(0); }
 }
 
+/* .seen добавляется через JS (IntersectionObserver), и JS должен unobserve после добавления */
 .link.seen{
   animation: bounce 420ms cubic-bezier(.22,.9,.31,1) 1 both;
 }
 
-/* small screens: single column; >=640px — two columns */
-@media (min-width:640px){
-  .links{grid-template-columns:repeat(2,1fr)}
+/* Для очень старых браузеров можно добавить простой fallback:
+   .link.seen { transform: translateY(0); }  (необязательно) */
+
+/* ==========================
+   Адаптивность
+   ========================== */
+@media (min-width: 640px){
+  .links{
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .hero{
+    margin-bottom:22px;
+  }
 }
 
-.foot{text-align:center;color:var(--muted);margin-top:8px;font-size:0.85rem}
+/* ==========================
+   Footer / мелкий текст
+   ========================== */
+.foot{
+  text-align:center;
+  color:var(--muted);
+  margin-top:12px;
+  font-size:0.86rem;
+}
+
+/* ==========================
+   Полезные советы при отладке
+   ==========================
+   Если фон не меняется после деплоя:
+   1) Проверь, что браузер действительно подгружает этот файл: DevTools → Network → styles.css → статус 200.
+   2) Временно открой страницу с параметром (обойти кэш): https://<your-site>/?v=2
+   3) В Console можно быстро протестировать:
+       document.body.style.background = 'linear-gradient(135deg,#fbc4ab,#e7c6ff)';
+   4) Если другой CSS переопределяет background, можно временно поставить override (для теста):
+       body { background: linear-gradient(135deg,#fbc4ab,#e7c6ff) !important; }
+   5) Убедись, что link в head указывает именно на /styles.css или на ./styles.css (и файл лежит в docs/ если используешь GitHub Pages с папкой docs).
+
+   ========================== */
