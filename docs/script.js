@@ -1,47 +1,50 @@
-// script.js — год, copy, and one-time enter-animation (prevents replay on scroll)
+// script.js — год, каскадная анимация появления, копирование
 document.addEventListener('DOMContentLoaded', () => {
-  // year
-  const y = new Date().getFullYear();
-  const el = document.getElementById('year'); if (el) el.textContent = y;
 
-  // copy buttons
-  document.querySelectorAll('[data-copy]').forEach(btn => {
-    btn.addEventListener('click', async () => {
-      const text = btn.getAttribute('data-copy');
-      try {
-        await navigator.clipboard.writeText(text);
-        const prev = btn.innerHTML;
-        btn.innerHTML = 'Скопировано ✓';
-        setTimeout(() => { btn.innerHTML = prev; }, 1500);
-      } catch (e) {
-        window.open('mailto:' + text);
-      }
-    });
-  });
+  // ── Авто-год в футере ──
+  const yearEl = document.getElementById('year');
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-  // IntersectionObserver: add .seen once on first visibility — prevents replay on scroll
+  // ── Каскадная анимация появления (staggered entrance) ──
+  // Используем IntersectionObserver: добавляем .seen с задержкой,
+  // чтобы карточки появлялись одна за другой.
+  const links = document.querySelectorAll('.link');
+
   if ('IntersectionObserver' in window) {
-    const opts = { root: null, rootMargin: '0px', threshold: 0.2 };
-    const io = new IntersectionObserver((entries, observer) => {
+    // Считаем порядковый номер для задержки
+    let visibleIndex = 0;
+
+    const observer = new IntersectionObserver((entries, obs) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
+          const delay = visibleIndex * 60; // 60ms между карточками
+          entry.target.style.transitionDelay = `${delay}ms`;
           entry.target.classList.add('seen');
-          observer.unobserve(entry.target); // UNOBSERVE — so the animation won't play again
+          visibleIndex++;
+          obs.unobserve(entry.target);
         }
       });
-    }, opts);
+    }, {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.15
+    });
 
-    document.querySelectorAll('.link').forEach(el => {
-      // if already visible on load, mark immediately (avoid waiting)
+    links.forEach(el => {
+      // Если карточка уже видна при загрузке — помечаем сразу
       const rect = el.getBoundingClientRect();
       if (rect.top < window.innerHeight && rect.bottom > 0) {
+        const delay = visibleIndex * 60;
+        el.style.transitionDelay = `${delay}ms`;
         el.classList.add('seen');
+        visibleIndex++;
       } else {
-        io.observe(el);
+        observer.observe(el);
       }
     });
   } else {
-    // fallback: just add seen (no animations replay anyway for most old browsers)
-    document.querySelectorAll('.link').forEach(el => el.classList.add('seen'));
+    // Fallback: просто показываем все
+    links.forEach(el => el.classList.add('seen'));
   }
+
 });
